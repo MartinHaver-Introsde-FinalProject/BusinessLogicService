@@ -78,7 +78,7 @@ public class BusinessResouces {
 	
 	
 	@GET
-	@Path("/person/{idPerson}/motivation")
+	@Path("/motivation")
 	@Produces({ MediaType.TEXT_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response getQuote2() throws ClientProtocolException, IOException {
         
