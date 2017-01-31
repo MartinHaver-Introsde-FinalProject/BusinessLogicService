@@ -79,7 +79,7 @@ public class BusinessResouces {
 	
 	@GET
 	@Path("/motivation")
-	@Produces({ MediaType.TEXT_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.TEXT_HTML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response getQuote2() throws ClientProtocolException, IOException {
         
         String ENDPOINT = "https://shrouded-refuge-42685.herokuapp.com/api/getQuote";
