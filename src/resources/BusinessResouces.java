@@ -1,7 +1,9 @@
 package resources;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -27,7 +29,14 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.glassfish.jersey.client.ClientConfig;
+import org.json.JSONObject;
+
 import calculation.Calculation;
 import model.Activity;
 import model.ActivitySelection;
@@ -49,7 +58,6 @@ public class BusinessResouces {
 	private RandomData rd = new RandomData();
 
 	private static URI getExBaseURI() {
-		//return UriBuilder.fromUri("http://localhost:8080/introsde.storage-service/api").build();
 		return UriBuilder.fromUri("https://shrouded-refuge-42685.herokuapp.com/api").build();
 	}
 	
@@ -68,6 +76,32 @@ public class BusinessResouces {
 		return "Hello! This is Business Logic Service.";
 	}
 	
+	
+	@GET
+	@Path("/person/{idPerson}/motivation")
+	@Produces({ MediaType.TEXT_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Response getQuote2() throws ClientProtocolException, IOException {
+        
+        String ENDPOINT = "https://shrouded-refuge-42685.herokuapp.com/api/getQuote";
+
+        DefaultHttpClient client = new DefaultHttpClient();
+        HttpGet request = new HttpGet(ENDPOINT);
+        HttpResponse response = client.execute(request);
+        BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        StringBuffer result = new StringBuffer();
+        String line = "";
+        while ((line = rd.readLine()) != null) {
+            result.append(line);
+        }
+        JSONObject o = new JSONObject(result.toString());
+        if(response.getStatusLine().getStatusCode() == 200){
+            return Response.ok(o.toString()).build();
+         }
+        return Response.status(204).build();
+     }
+	
+	
+	
 	/*
 	 * Getting motivation quote for a person.
 	 * 
@@ -77,7 +111,7 @@ public class BusinessResouces {
 	 */
 
 	@GET
-	@Path("/person/{idPerson}/motivation")
+	@Path("/person/{idPerson}/motivation/original")
 	@Produces({ MediaType.TEXT_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Motivation getMotivationByRandomId(@PathParam("idPerson") int idPerson) {
 		System.out.println("Getting a motivation quote ...");
