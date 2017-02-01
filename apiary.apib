@@ -1,0 +1,117 @@
+FORMAT: 1A
+HOST: https://safe-ravine-27770.herokuapp.com/blogic
+
+# Business Logic Service
+
+This service is the brains of the system, it carries on various calculations
+and data manipulations if necessary, while accesing the data from lower levels.
+
+
+## Get motivational quote [/getQuote]
+
+### Get Quote [GET]
++ Response 200 (application/json)
+
+        {
+          "quoteText": "Never ignore a gut feeling, but never believe that it's enough.",
+          "senderLink": "",
+          "senderName": "",
+          "quoteLink": "http://forismatic.com/en/051b5ad4d2/",
+          "quoteAuthor": "Robert Heller"
+        }
+        
+## New Health Measure for a person [/person/1/healthMeasure/1]
+### Add new health measure [POST]
+
+Adding new Health Measure belonging to a Health Measure Type.
+
++ Request (application/json)
+
+        { 
+        "idPerson": 1,
+        "firstname": "King",
+        "lastname": "Kong",
+        "birthdate": "1900-01-01 00:00:00",
+        "username": "kong",
+        "sex": 2,
+        "healthMeasures": 
+        [ 
+        { 
+        "idHealthMeasure": 1,
+        "measureDefinition":
+        {
+        "idMeasureDefinition": 1,
+        "measureName": "weight",
+        "measureType": "double",
+        "measureRanges": 
+        [] 
+        }, 
+        "value": 989 
+        },
+        { 
+        "idHealthMeasure": 2,
+        "measureDefinition": 
+        { 
+        "idMeasureDefinition": 2,
+        "measureName": "height",
+        "measureType": "double",
+        "measureRanges":
+        [] 
+        }, 
+        "value": 20 
+        }, 
+        {
+        "idHealthMeasure": 3,
+        "measureDefinition":
+        { 
+        "idMeasureDefinition": 3,
+        "measureName": "age",
+        "measureType": "integer",
+        "measureRanges": 
+        [] 
+        },
+        "value": 117 
+        } 
+        ] 
+        }
+
++ Response 201 (application/json)
+
+## Get activity suggestion [/person/1/activitySuggestion]
+
+### Get Suggestion [GET]
++ Response 200 (application/xml)
+
+        <activities>
+            <activity>
+                <idActivity>82</idActivity>
+                <activityName>Stair stepper, fairly light effort (RPE 11)</activityName>
+                <caloriesPerHour>415.0</caloriesPerHour>
+                <activityType>Indoor exercise machines</activityType>
+            </activity>
+            <activity>
+                <idActivity>71</idActivity>
+                <activityName>Swimming, treading water, fast vigorous effort</activityName>
+                <caloriesPerHour>612.0</caloriesPerHour>
+                <activityType>Water activities</activityType>
+            </activity>
+            <activity>
+                <idActivity>33</idActivity>
+                <activityName>Aerobic, low impact</activityName>
+                <caloriesPerHour>260.0</caloriesPerHour>
+                <activityType>Dancing</activityType>
+            </activity>
+        </activities>
+
+## Update activity [/person/1/activitySelection]
+### Update activity selection [PUT]
+Updating Activity Selection (time, usedCalories)
+
++ Request (application/json)
+
+        { 
+        "time": 2, 
+        "usedCalories": 1000
+        }
+
++ Response 201 (application/json)
