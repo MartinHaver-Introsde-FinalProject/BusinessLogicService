@@ -19,10 +19,6 @@ public class Calculation {
 
 	public double getBMR(double height, double weight, int age, int sex) {
 		height = height * 100.0;
-		//Male: BMR = 10×weight + 6.25×height - 5×age + 5
-		//Female: BMR = 10×weight + 6.25×height - 5×age - 161
-		//kilograms 
-		//centimeters
 		double bmr = 0;
 		if (sex == 1)
 			bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
@@ -33,13 +29,13 @@ public class Calculation {
 	
 	public String getGoalName(double bmi){
 		if (bmi <= 18.5)
-			return "Gain weight 0.5kg per week.";
+			return "You should gain weight at rate 0.5kg per week.";
 		else if (bmi > 18.5 && bmi <= 25)
-			return "Maintain weight.";
+			return "You should maintain weight.";
 		else if (bmi > 25 && bmi <= 30)
-			return "Lose weight 0.5kg per week.";
-		else if (bmi > 30)
-			return "Lose weight 0.5kg per week.";
+			return "You should lose weight at rate 0.2kg per week.";
+		else if (bmi > 25)
+			return "You should lose weight at rate 0.5kg per week.";
 		return null;
 	}
 	

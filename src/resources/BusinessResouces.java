@@ -41,7 +41,7 @@ import utils.RandomData;
 
 @Stateless
 @LocalBean
-@Path("/api")
+@Path("/blogic")
 public class BusinessResouces {
 	@Context
 	UriInfo uriInfo;
@@ -51,31 +51,18 @@ public class BusinessResouces {
 	private RandomData rd = new RandomData();
 
 	private static URI getExBaseURI() {
-		return UriBuilder.fromUri("https://shrouded-refuge-42685.herokuapp.com/api").build();
+		return UriBuilder.fromUri("https://shrouded-refuge-42685.herokuapp.com/storage").build();
 	}
 	
-	/*
-	 * Getting information of the business logic service.
-	 * 
-	 * http://localhost:8080/introsde.business-logic-service/api
-	 * 
-	 * GET: OK
-	 */
-
+	//Info about the service.
 	@GET
 	@Produces({ MediaType.TEXT_HTML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public String getInfo() {
 		System.out.println("Getting api information...");
-		return "Hello! This is Business Logic Service.";
+		return "This Business Logic Service is part of a project by M.Haver.";
 	}
 	
-	/*
-	 * Getting motivation quote for a person.
-	 * 
-	 * URL: http://localhost:8080/introsde.business-logic-service/api/person/1/motivation
-	 * 
-	 * GET: OK
-	 */
+	//Obtain motivation quote.
 	@GET
 	@Path("/motivation")
 	@Produces({ MediaType.TEXT_HTML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -176,7 +163,6 @@ public class BusinessResouces {
 			activitySelection.setUsedCalories(activitySelection.getTime() * activity.getCaloriesPerHour());
 		}
 		
-		
 		service = client.target(getExBaseURI()).path("person").path(String.valueOf(idPerson)).path("goal").path("activitySelection");
 		response = service.request(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).put(Entity.json(activitySelection));
 		httpStatus = response.getStatus();
@@ -195,7 +181,6 @@ public class BusinessResouces {
 				}
 			}
 		}
-		
 		return person;
 	}
 		
