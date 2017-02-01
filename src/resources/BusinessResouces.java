@@ -4,7 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -37,7 +40,6 @@ import model.ActivitySelection;
 import model.Goal;
 import model.HealthMeasure;
 import model.Person;
-import utils.RandomData;
 
 @Stateless
 @LocalBean
@@ -48,8 +50,6 @@ public class BusinessResouces {
 	@Context
 	Request request;
 	
-	private RandomData rd = new RandomData();
-
 	private static URI getExBaseURI() {
 		return UriBuilder.fromUri("https://shrouded-refuge-42685.herokuapp.com/storage").build();
 	}
@@ -73,10 +73,10 @@ public class BusinessResouces {
         DefaultHttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(ENDPOINT);
         HttpResponse response = client.execute(request);
-        BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        BufferedReader buff = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
         StringBuffer result = new StringBuffer();
         String line = "";
-        while ((line = rd.readLine()) != null) {
+        while ((line = buff.readLine()) != null) {
             result.append(line);
         }
         JSONObject o = new JSONObject(result.toString());
@@ -223,13 +223,12 @@ public class BusinessResouces {
 		Goal goal = new Goal();
 		goal.setActivitySelections(null);
 		goal.setCurrent(1);
-		goal.setDate(rd.getDateTime());
+		goal.setDate(this.getDateTime());
 		goal.setGoalName(calc.getGoalName(bmi));
 		goal.setIdealBmi(calc.getBMI(height, weight));
 		goal.setIdealWeight(calc.getIdealWeight(height, sex));
 		goal.setIdGoal(0);
 		goal.setShavedCalories(calc.getCaloriesNeedForDailyActivity(bmr));
-
 
 		ClientConfig clientConfig = new ClientConfig();
 		Client client = ClientBuilder.newClient(clientConfig);
@@ -240,15 +239,13 @@ public class BusinessResouces {
 			System.err.println(response.readEntity(String.class));
 			return null;
 		}
-
 		return response.readEntity(Person.class);
 	}
-	
 	
 	public List<Activity> suggestActivities() {
 		List<Activity> activitySuggestions = new ArrayList<Activity>();
 		for (int i = 0; i < 3; i ++) {
-			int idActivity = rd.randBetween(1, 84);
+			int idActivity = this.randBetween(1, 84);
 			ClientConfig clientConfig = new ClientConfig();
 			Client client = ClientBuilder.newClient(clientConfig);
 			WebTarget service = client.target(getExBaseURI()).path("activity").path(String.valueOf(idActivity));
@@ -294,7 +291,6 @@ public class BusinessResouces {
 		Calculation calc = new Calculation();
 
 		double bmi = calc.getBMI(height, weight);
-
 		HealthMeasure tempHealthMeasure = new HealthMeasure();
 		tempHealthMeasure.setIdHealthMeasure(4);
 		tempHealthMeasure.setMeasureDefinition(null);
@@ -311,7 +307,6 @@ public class BusinessResouces {
 		}
 
 		double bmr = calc.getBMR(height, weight, age, sex);
-
 		tempHealthMeasure = new HealthMeasure();
 		tempHealthMeasure.setIdHealthMeasure(5);
 		tempHealthMeasure.setMeasureDefinition(null);
@@ -330,7 +325,7 @@ public class BusinessResouces {
 		Goal goal = new Goal();
 		goal.setActivitySelections(null);
 		goal.setCurrent(1);
-		goal.setDate(rd.getDateTime());
+		goal.setDate(this.getDateTime());
 		goal.setGoalName(calc.getGoalName(bmi));
 		goal.setIdealBmi(calc.getBMI(height, weight));
 		goal.setIdealWeight(calc.getIdealWeight(height, sex));
@@ -346,5 +341,15 @@ public class BusinessResouces {
 			return null;
 		}
 		return response.readEntity(Person.class);
-	}	
+	}
+	
+	//utility methods
+	public String getDateTime() {
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		String date = dateFormat.format(new Date());
+		return date;
+	}
+    public int randBetween(int start, int end) {
+        return start + (int)Math.round(Math.random() * (end - start));
+    }
 }
