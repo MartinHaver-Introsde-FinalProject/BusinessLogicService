@@ -68,7 +68,7 @@ public class BusinessResouces {
 	@Produces({ MediaType.TEXT_HTML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response getQuote2() throws ClientProtocolException, IOException {
         
-        String ENDPOINT = "https://shrouded-refuge-42685.herokuapp.com/api/getQuote";
+        String ENDPOINT = "https://shrouded-refuge-42685.herokuapp.com/storage/getQuote";
 
         DefaultHttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(ENDPOINT);
