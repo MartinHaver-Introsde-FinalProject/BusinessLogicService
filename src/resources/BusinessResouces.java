@@ -41,6 +41,7 @@ import model.Goal;
 import model.HealthMeasure;
 import model.Person;
 
+@SuppressWarnings("deprecation")
 @Stateless
 @LocalBean
 @Path("/blogic")
@@ -86,25 +87,7 @@ public class BusinessResouces {
         return Response.status(204).build();
      }
 	
-	/*
-	 * Adding new health measure (e.g. weight, height, age)
-	 * 
-	 * URL: http://localhost:8080/introsde.business-logic-service/api/person/1/healthMeasure
-	 * 
-	 * POST: OK
-	 * 
-	 * { "idPerson": 1, "firstname": "Chuck", "lastname": "Norris", "birthdate":
-	 * "1945-01-01 00:00:00", "username": "chuck.norris", "sex": 1,
-	 * "healthMeasures": [ { "idHealthMeasure": 1, "measureDefinition": {
-	 * "idMeasureDefinition": 1, "measureName": "weight", "measureType":
-	 * "double", "measureRanges": [] }, "value": 88 }, { "idHealthMeasure": 2,
-	 * "measureDefinition": { "idMeasureDefinition": 2, "measureName": "height",
-	 * "measureType": "double", "measureRanges": [] }, "value": 1.6 }, {
-	 * "idHealthMeasure": 3, "measureDefinition": { "idMeasureDefinition": 3,
-	 * "measureName": "age", "measureType": "integer", "measureRanges": [] },
-	 * "value": 29 } ] }
-	 */
-
+	//Adding new health measure (e.g. weight, height, age)
 	@POST
 	@Path("/person/{idPerson}/healthMeasure")
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -114,14 +97,7 @@ public class BusinessResouces {
 		return saveHealthMeasure(person);
 	}
 	
-	/*
-	 * Getting activity suggestions
-	 * 
-	 * http://localhost:8080/introsde.business-logic-service/api/person/1/activitySuggestion
-	 * 
-	 * GET: OK
-	 */
-	
+	//Getting activity suggestions
 	@GET
 	@Path("/person/{idPerson}/activitySuggestion")
 	@Produces({ MediaType.TEXT_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -130,18 +106,7 @@ public class BusinessResouces {
 		return suggestActivities();
 	}
 	
-	
-	/*
-	 * Updating Activity Selection (time, usedCalories)
-	 * 
-	 * http://localhost:8080/introsde.local-database-service/person/1/goal/activitySelection
-	 * 
-	 * PUT: OK
-	 * 
-	 * { "time": 2}
-	 * 
-	 */
-
+	//Updating Activity Selection (time, usedCalories)
 	@PUT
 	@Path("/person/{idPerson}/activitySelection")
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -184,10 +149,7 @@ public class BusinessResouces {
 		return person;
 	}
 		
-	/*
-	 * Create a new goal of a specific person.
-	 */
-	
+	//Create a new goal of a specific person.
 	@POST
 	@Path("/person/{idPerson}/goal")
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -196,10 +158,7 @@ public class BusinessResouces {
 		return createNewGoal(person);
 	}
 	
-	/*
-	 * Supporting functions.
-	 */
-	
+	// Supporting methods.
 	public Person createNewGoal(Person person) {
 		Calculation calc = new Calculation();
 		
@@ -218,6 +177,7 @@ public class BusinessResouces {
 				bmr = healthMeasure.getValue();
 			}
 		}
+		
 		int sex = person.getSex();
 		
 		Goal goal = new Goal();
@@ -289,7 +249,6 @@ public class BusinessResouces {
 		}
 
 		Calculation calc = new Calculation();
-
 		double bmi = calc.getBMI(height, weight);
 		HealthMeasure tempHealthMeasure = new HealthMeasure();
 		tempHealthMeasure.setIdHealthMeasure(4);
@@ -343,12 +302,12 @@ public class BusinessResouces {
 		return response.readEntity(Person.class);
 	}
 	
-	//utility methods
 	public String getDateTime() {
 		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		String date = dateFormat.format(new Date());
 		return date;
 	}
+	
     public int randBetween(int start, int end) {
         return start + (int)Math.round(Math.random() * (end - start));
     }
